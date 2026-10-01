@@ -56,7 +56,3 @@ docker build -t lightwave:latest .
 # Run containerized daemon
 docker run --rm lightwave:latest
 ```
-
-```
-
-```

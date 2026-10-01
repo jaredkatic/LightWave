@@ -8,25 +8,24 @@
 #include <chrono>
 #include <unistd.h>
 
+#include "CircuitBreaker.hpp"
+
 std::string getHostIpAddress(const char *domainName);
 int connectionHealthProbe(const char *host, const char *port);
 
 int main(int argc, char const *argv[])
 {
-  // std::string output;
+  // Initialize CircuitBreaker: Target google.com:80, 3 max failures, 5s cooldown
+  CircuitBreaker breaker("google.com", "80", 3, 5);
 
-  // output = getHostIpAddress("google.com");
+  std::cout << "--- Lightwave SRE Deamon Running ---" << std::endl;
 
-  // if (!output.empty())
-  // {
-  //   std::cout << output << std::endl;
-  // }
-  // else
-  // {
-  //   std::cout << "Could not resolve IP address." << std::endl;
-  // }
-
-  connectionHealthProbe("google.com", "80");
+  for (int i = 0; i < 5; ++i)
+  {
+    std::cout << "\n[RUN: " << (i + 1) << "]" << std::endl;
+    breaker.executeProbe(connectionHealthProbe);
+    sleep(1);
+  }
 
   return 0;
 }

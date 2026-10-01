@@ -1,0 +1,62 @@
+# Lightwave
+
+`Lightwave` is a lightweight network monitoring daemon and circuit breaker engine written in C++20. It performs active HTTP network probes using POSIX sockets, measures latency, and prevents cascading service failures using an automated state machine.
+
+## Key Features
+
+- **POSIX Sockets Engine:** Native network socket management, IP resolution (`getaddrinfo`), and HTTP/1.1 response validation.
+- **Circuit Breaker State Machine:** Features `CLOSED`, `OPEN`, and `HALF-OPEN` states with configurable failure thresholds and cooldown management.
+- **Low-Latency Design:** Optimized C++ execution targeting low overhead and zero unnecessary heap allocations.
+- **Production Build Architecture:** Native C++20 CMake configuration, GoogleTest suite via `FetchContent`, and multi-stage Docker builds.
+
+## Repository Structure
+
+```text
+lightwave/
+├── CMakeLists.txt
+├── Dockerfile
+├── .dockerignore
+├── .gitignore
+├── include/
+│   └── CircuitBreaker.hpp
+├── src/
+│   └── main.cpp
+└── tests/
+    └── test_circuit_breaker.cpp
+```
+
+## Quickstart
+
+### Build and Run Locally
+
+```bash
+# 1. Configure CMake
+cmake -B build -S .
+
+# 2. Compile project
+cmake --build build
+
+# 3. Execute daemon
+./build/lightwave
+```
+
+### Running Unit Tests
+
+```bash
+# Run unit test suite via CTest
+ctest --test-dir build --output-on-failure
+```
+
+### Docker Deployment
+
+```bash
+# Build container (Compiles binary & executes GoogleTest automatically)
+docker build -t lightwave:latest .
+
+# Run containerized daemon
+docker run --rm lightwave:latest
+```
+
+```
+
+```
